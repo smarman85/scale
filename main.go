@@ -24,6 +24,24 @@ func main() {
                 panic(err.Error())
         }
 
+        for {
+                // get deployments
+                deps, err := clientset.AppsV1().Deployments("").List(metav1.ListOptions{})
+                if err != nil {
+                        panic(err.Error())
+                }
+                f.Printf("There are %d deployments running in the cluster\n", len(deps.Items))
+                for k, _ := range deps.Items {
+                        f.Println("NEW")
+                        //f.Printf("%T\n", k)
+                        f.Printf("%T\n", deps.Items[k])
+                        //f.Println("%T\n", deps.Items[k].Spec.Template.Spec.Containers)
+                        f.Println(deps.Items[k].Name)
+                }
+
+                time.Sleep(10 * time.Second)
+        }
+
 
         for {
                 // get pods in all the namespaces by omitting namespace
