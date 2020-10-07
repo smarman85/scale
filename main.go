@@ -3,15 +3,15 @@ package main
 import (
         //"context"
         "time"
+        //"strconv"
         f "fmt"
         metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-        "k8s.io/apimachinery/pkg/api/errors"
+        //"k8s.io/apimachinery/pkg/api/errors"
         "k8s.io/client-go/kubernetes"
         "k8s.io/client-go/rest"
 )
 
 func main() {
-        f.Println("Hello")
         // creates the in-cluster config
         config, err := rest.InClusterConfig()
         if err != nil {
@@ -31,19 +31,44 @@ func main() {
                         panic(err.Error())
                 }
                 f.Printf("There are %d deployments running in the cluster\n", len(deps.Items))
+                //https://godoc.org/k8s.io/api/apps/v1#DeploymentList
                 for k, _ := range deps.Items {
-                        f.Println("NEW")
+                        //f.Println("BUTTS")
                         //f.Printf("%T\n", k)
-                        f.Printf("%T\n", deps.Items[k])
+                        //f.Printf("%T\n", deps.Items[k])
                         //f.Println("%T\n", deps.Items[k].Spec.Template.Spec.Containers)
-                        f.Println(deps.Items[k].Name)
+                        f.Printf("Name: %s\n", deps.Items[k].Name)
+                        f.Printf("Namespace: %s\n", deps.Items[k].Namespace)
+                        //f.Printf("Spec: %v\n", deps.Items[k].Spec)
+                        //f.Printf("Status: %v\n", deps.Items[k].Status)
+                        f.Printf("Created: %v\n", deps.Items[k].CreationTimestamp)
+                        f.Printf("%T\n", deps.Items[k].Spec.Replicas)
+                        reaplicas := deps.Items[k].Spec.Replicas
+                        f.Printf("Replicas: %v\n", reaplicas)
+                        f.Println("POD INFO")
+                        f.Println("Containers")
+                        //https://godoc.org/k8s.io/api/core/v1#PodTemplateSpec
+                        containers := deps.Items[k].Spec.Template.Spec.Containers
+                        for container, _ := range containers {
+                                //https://godoc.org/k8s.io/api/core/v1#Container
+                                f.Printf("ContainerName: %s\n", containers[container].Name)
+                                f.Printf("ContainerImage: %s\n", containers[container].Image)
+                                f.Printf("ContainerENV: %s\n", containers[container].Env)
+                        }
+                        f.Println("Nodeselector")
+                        f.Println(deps.Items[k].Spec.Template.Spec.NodeSelector)
+                        f.Println("NodeName")
+                        f.Println(deps.Items[k].Spec.Template.Spec.NodeSelector)
+                        f.Println("*******")
+                        //f.Println(deps.Items[k])
+                        //f.Printf("%T\n", deps.Items[k])
+                        //f.Println(deps.Items[k])
                 }
-
-                time.Sleep(10 * time.Second)
+                time.Sleep(30 * time.Second)
         }
 
 
-        for {
+        /*for {
                 // get pods in all the namespaces by omitting namespace
                 // Or specify namespace to get pods in particular namespace
                 //pods, err := clientset.CoreV1().Pods("").List(context.TODO(), metav1.ListOptions{})
@@ -67,6 +92,6 @@ func main() {
                 }
 
                 time.Sleep(10 * time.Second)
-        }
+        }*/
 }
 
