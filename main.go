@@ -33,7 +33,6 @@ func main() {
                 f.Printf("There are %d deployments running in the cluster\n", len(deps.Items))
                 //https://godoc.org/k8s.io/api/apps/v1#DeploymentList
                 for k, _ := range deps.Items {
-                        //f.Println("BUTTS")
                         //f.Printf("%T\n", k)
                         //f.Printf("%T\n", deps.Items[k])
                         //f.Println("%T\n", deps.Items[k].Spec.Template.Spec.Containers)
