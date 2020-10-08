@@ -67,6 +67,7 @@ func main() {
                 if err != nil {
                         panic(err)
                 }
+<<<<<<< HEAD
                 f.Println(string(output))
                 //f.Println("%T\n", deps.Items[k].Spec.Template.Spec.Containers)
                 f.Printf("Name: %s\n", deps.Items[k].Name)
