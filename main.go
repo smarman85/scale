@@ -17,7 +17,7 @@ type Deployment struct {
         Namespace string `json:"namespace"`
         Name string `json:"name"`
         Replicas int `json:"replicas"`
-        Containers []containers `json:"containers"`
+        Containers map[string]string `json:"containers"`
         Nodeselector string `json:"nodeselector"`
         Nodename string `json:"nodename"`
 }
@@ -54,11 +54,18 @@ func main() {
         f.Printf("There are %d deployments running in the cluster\n", len(deps.Items))
         //https://godoc.org/k8s.io/api/apps/v1#DeploymentList
         for k, _ := range deps.Items {
+
+                cont := make(map[string]string)
+                containers := deps.Items[k].Spec.Template.Spec.Containers
+                for container, _ := range containers {
+                        cont["image"] = containers[container].Image
+                        cont["name"] = containers[container].Name
+                }
                 dep := &Deployment{
                         Namespace: deps.Items[k].Namespace,
                         Name: deps.Items[k].Name,
                         Replicas: int(deps.Items[k].Status.Replicas),
-                        //Containers:
+                        Containers: cont,
                         //Nodeselector: deps.Items[k].Spec.Template.Spec.NodeSelector,
                         Nodename: deps.Items[k].Spec.Template.Spec.NodeName,
                 }
@@ -77,7 +84,7 @@ func main() {
                 f.Println("POD INFO")
                 f.Println("Containers")
                 //https://godoc.org/k8s.io/api/core/v1#PodTemplateSpec
-                containers := deps.Items[k].Spec.Template.Spec.Containers
+                //containers := deps.Items[k].Spec.Template.Spec.Containers
                 for container, _ := range containers {
                         //https://godoc.org/k8s.io/api/core/v1#Container
                         f.Printf("ContainerName: %s\n", containers[container].Name)
