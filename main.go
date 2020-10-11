@@ -31,7 +31,18 @@ type size struct {
         Pods int
 }
 
-func scale(deployment []byte) {
+func scaleTo(deployment, NAMESPACE string, clientset *kubernetes.Clientset) {
+        result, err := clientset.AppsV1().Deployments(NAMESPACE).Get(deployment, metav1.GetOptions{})
+        if err != nil {
+                f.Errorf("Unable to get deployment: %s %v", deployment, err)
+        }
+
+        result.Spec.Replicas = int32Ptr(3)
+        _, err = clientset.AppsV1().Deployments(NAMESPACE).Update(result)
+        if err != nil {
+                f.Errorf("Unable to update deployment: %s %v", deployment, err)
+        }
+
 }
 
 func int32Ptr(i int32) *int32 { return &i }
@@ -64,22 +75,11 @@ func main() {
         //https://godoc.org/k8s.io/api/apps/v1#DeploymentList
         for k, _ := range deps.Items {
 
-                if deps.Items[k].Status.Replicas >= 2 {
+                if deps.Items[k].Status.Replicas <= 2 {
                         f.Println("TOO LOW")
-                        result, getErr := clientset.AppsV1().Deployments(NAMESPACE).Get(deps.Items[k].Name, metav1.GetOptions{})
-                        if getErr != nil {
-                                f.Println(getErr)
+                        if deps.Items[k].Name == "gosite" {
+                                scaleTo(deps.Items[k].Name, NAMESPACE, clientset)
                         }
-                        result.Spec.Replicas = int32Ptr(3)
-                        _, updateErr := clientset.AppsV1().Deployments(NAMESPACE).Update(result)
-                        if updateErr != nil {
-                                f.Println(updateErr)
-                        }
-
-
-
-
-
                 }
 
                 cont := make(map[string]string)
