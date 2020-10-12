@@ -10,6 +10,10 @@
 		<h1>{{ $element.name }}</h1>
 		<p>{{ $element.namespace }}</p>
 		<p>{{ $element.replicas }}</p>
+		<p>Containers</p>
+		{{ range $k, $v := $element.containers }}
+			<p>{{ $k }}:{{ $v }}</p>
+		{{ end }}
 		
 	</div>
 {{ end }}

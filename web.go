@@ -29,12 +29,12 @@ func init(){
 }
 
 
-func deployments() []map[string]string {
+func deployments() []map[string]interface{} {
 	if os.Getenv("NAMESPACE") != "" {
 		NAMESPACE = os.Getenv("NAMESPACE")
 	}
 
-	dplymts := make([]map[string]string, 0)
+	dplymts := make([]map[string]interface{}, 0)
 
 	config, err := rest.InClusterConfig()
 	if err != nil {
@@ -54,7 +54,7 @@ func deployments() []map[string]string {
 	}
 
 	for d, _ := range deps.Items {
-		dep := make(map[string]string, 0)
+		dep := make(map[string]interface{}, 0)
 		cont := make(map[string]string, 0)
 		containers := deps.Items[d].Spec.Template.Spec.Containers
 		for c, _ := range containers{
@@ -63,9 +63,8 @@ func deployments() []map[string]string {
 		}
 		dep["name"] = deps.Items[d].Name
 		dep["namespace"] = deps.Items[d].Namespace
-		dep["replicas"] = string(deps.Items[d].Status.Replicas)
-		//dep["containers"] = cont
-		
+		dep["replicas"] = int(deps.Items[d].Status.Replicas)
+		dep["containers"] = cont
 		//d := Deployments{
 		//	Name: deps.Items[d].Name,
 		//	Namespace: deps.Items[d].Namespace,
