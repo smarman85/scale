@@ -1,0 +1,15 @@
+{{ template "header" }}
+<div class="content-block">
+ <h1>Hello and welcome</h1>
+ <p>
+{{ template "home" }}
+ </p>
+</div>
+{{ range $element := . }}
+        <div>
+                <h1>{{ $element }}</h1>
+
+        </div>
+{{ end }}
+{{ template "footer" }}
+
