@@ -7,10 +7,10 @@
 </div>
 {{ range $element := . }}
 	<div>
-		<h1>{{ $element.name }}</h1>
-		<p>{{ $element.namespace }}</p>
-		<p>{{ $element.replicas }}</p>
-		<p>Containers</p>
+		<h1>Deployment Name: {{ $element.name }}</h1>
+		<p>Namespace: {{ $element.namespace }}</p>
+		<p>Number of replicas: {{ $element.replicas }}</p>
+		<p>Containers:</p>
 		{{ range $k, $v := $element.containers }}
 			<p>{{ $k }}:{{ $v }}</p>
 		{{ end }}
