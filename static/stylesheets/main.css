@@ -1,0 +1,314 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.container {
+  width: 100%;
+}
+
+.clear {
+  clear: both;
+}
+
+header {
+  margin: 0 auto;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  background-color: rgba(102, 95, 96, 0.7);
+  z-index: 9;
+}
+
+header .hamburger {
+  cursor: pointer;
+  display: none;
+  color: yellow;
+  float: right;
+  width: 57px;
+  font-size: 3em;
+}
+
+header .me {
+  width: 80px;
+  height: auto;
+  border-radius: 40px;
+}
+
+header .links {
+  margin-top: 28px;
+  float: right;
+  margin-right: 24px;
+}
+
+header .links li {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+header a {
+  font-size: 1em;
+  color: yellow;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: Verdana, geneva, sans-serif;
+  font-weight: bold;
+}
+
+.background-image {
+  height: 50%;
+  width: 100%;
+  margin-bottom: 3%;
+  z-index: 1;
+  -moz-box-shadow: 0 6px 4px 2px gray;
+  -webkit-box-shadow: 0 6px 4px 2px gray;
+  box-shadow: 0 6px 4px 2px gray;
+}
+
+h2:before {
+  display: block;
+  content: " ";
+  margin-top: -85px;
+  height: 85px;
+  visibility: hidden;
+}
+
+footer {
+  width: 100%;
+  background-color: rgba(102, 95, 96, 0.7);
+  margin-top: 5%;
+  padding: 4% 0;
+}
+
+footer .social-links {
+  width: 40%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+footer .social-links a {
+  display: inline-block;
+  width: 19%;
+  margin-right: 4%;
+}
+
+footer .social-links a:nth-child(3) {
+  margin-right: none;
+}
+
+footer .social-links img {
+  width: 80%;
+  height: auto;
+  border-radius: 18px;
+}
+
+h2, h1 {
+  text-transform: uppercase;
+  font-family: Verdana, geneva, sans-serif;
+  text-align: center;
+  margin-bottom: 4%;
+  margin-top: 4%;
+}
+
+.content-block {
+  width: 95%;
+  margin: 0 auto;
+}
+
+.content-block h1 {
+  text-transform: uppercase;
+  font-family: Verdana, geneva, sans-serif;
+  text-align: left;
+  margin-bottom: 4%;
+  margin-top: 4%;
+}
+
+.content-block p {
+  margin: 4% 0;
+  overflow: auto;
+  font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;
+  font-size: 1.1em;
+  line-height: 1.5em;
+}
+
+.content-block code {
+  width: 95%;
+  background: #2D3748;
+  color: #f5fbff;
+  display: block;
+  font-family: "Roboto Mono", monospace;
+  font-size: 13px;
+  font-weight: 300;
+  border-radius: 3px;
+  border: none;
+  margin-bottom: 24px;
+  overflow: hidden;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+.codebar {
+  width: 100%;
+  background-color: black;
+}
+
+.stoplight li {
+  border-radius: 1em;
+  display: inline-block;
+  margin: 0.3em 0px 0px 0.3em;
+  width: 1em;
+  height: 1em;
+}
+
+code .code_content {
+  padding: 10px 10px;
+}
+
+code pre {
+  font-family: monospace;
+  display: inline-flex;
+}
+
+.red {
+  background-color: #FC5B57;
+}
+
+.yellow {
+  background-color: #E5BF3C;
+}
+
+.green {
+  background-color: #52C038;
+}
+
+.content-block .content {
+  width: 95%;
+}
+
+.tile_container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tile_container a {
+  font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;
+  color: #000000;
+  text-decoration: none;
+  width: 30%;
+  margin: 1%;
+}
+
+.projects-tile {
+  width: 100%;
+  background-color: rgba(102, 95, 96, 0.05);
+}
+
+.projects-tile h1 {
+  padding-top: 4%;
+}
+
+.projects-tile img {
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+  height: auto;
+  width: 95%;
+}
+
+.projects-tile p {
+  padding: 2%;
+}
+
+.content-block code .s {
+  color: #F6B9FF;
+}
+
+.content-block code .c {
+  color: #aed419;
+}
+
+@media only screen and (max-device-width: 1020px), screen and (max-width: 1020px) {
+
+  header .hamburger {
+    display: none;
+  }
+  
+  header #mobile-menu {
+    display: none;
+  }
+}
+
+@media only screen and (max-device-width: 720px), screen and (max-width: 720px) {
+
+  header .me {
+    width: 16%;
+    border-radius:  73px;
+  }
+
+  h1 {
+    font-size: 6em;
+  }
+
+  .content-block p {
+    font-size: 2em;
+  }
+
+  code .code_content {
+    line-height: normal;
+    font-size: 2.5em;
+  }
+
+  .projects-tile p {
+    font-size: 2.3em;
+  }
+  
+  .content-block p {
+      font-size: 150%;
+  }
+  
+  header .hamburger {
+    display: block;
+    font-size: 6em;
+    margin-right: 0.6em;
+  }
+
+  header a {
+    font-size: 19px;
+  }
+
+  header .links {
+    display: none;
+  }
+
+  header #mobile-menu {
+    width: 100%;
+    margin: 0;
+    float: none;
+  }
+
+  header #mobile-menu li {
+    height: 10%;
+    padding: 5% 0;
+    border-bottom: 1px solid yellow;
+    width: 100%;
+    text-align: center;
+    color: yellow;
+    font-size: 3em;
+  }
+
+  .tile_container a {
+    width: 95%;
+  }
+
+  footer .social-links {
+    width: 75%;
+    margin-left: 17%;
+  }
+  
+  .content-block code {
+    font-size: 150%%;
+  }
+}
