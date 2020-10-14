@@ -126,6 +126,7 @@ func apiDeployments() []Deployments {
 func main() {
 	router := mux.NewRouter()
 
+	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	router.HandleFunc("/", home)
 	router.HandleFunc("/api/v1/deployments", apiHome)
 	http.ListenAndServe(":8080", router)
