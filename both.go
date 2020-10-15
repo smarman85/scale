@@ -65,63 +65,11 @@ func deployments() []map[string]interface{} {
 		dep["namespace"] = deps.Items[d].Namespace
 		dep["replicas"] = int(deps.Items[d].Status.Replicas)
 		dep["containers"] = cont
-		//d := Deployments{
-		//	Name: deps.Items[d].Name,
-		//	Namespace: deps.Items[d].Namespace,
-		//	Replicas: int(deps.Items[d].Status.Replicas),
-		//	Containers: cont,
-		//}
-		//output, err := json.Marshal(d)
-		//if err != nil {
-		//	logErrorf("Error unmarshalling json %v", err)
-		//}
+
 		dplymts = append(dplymts, dep)
 	}
 	return dplymts
 }
-
-func apiDeployments() []Deployments {
-  if os.Getenv("NAMESPACE") != "" {
-    NAMESPACE = os.Getenv("NAMESPACE")
-  }
-
-  config, err := rest.InClusterConfig()
-  if err != nil {
-    logErrorExitf("Error creating config: %v", err)
-    panic(err.Error())
-  }
-
-  clientset, err := kubernetes.NewForConfig(config)
-  if err != nil {
-    logErrorExitf("Error creating config: %v", err)
-    panic(err.Error())
-  }
-
-  deps, err := clientset.AppsV1().Deployments(NAMESPACE).List(metav1.ListOptions{})
-  if err != nil {
-    logErrorf("Error getting deployments in namespace %s: %v", NAMESPACE, err)
-  }
-
-  dplymts := make([]Deployments, 0)
-
-  for d, _ := range deps.Items {
-    cont := make(map[string]string, 0)
-    containers := deps.Items[d].Spec.Template.Spec.Containers
-    for c, _ := range containers{
-      cont["image"] = containers[c].Image
-      cont["name"] = containers[c].Name
-    }
-    d := Deployments{
-      Name: deps.Items[d].Name,
-      Namespace: deps.Items[d].Namespace,
-      Replicas: int(deps.Items[d].Status.Replicas),
-      Containers: cont,
-    }
-    dplymts = append(dplymts, d)
-  }
-  return dplymts
-}
-
 
 func main() {
 	router := mux.NewRouter()
@@ -141,7 +89,6 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func apiHome(w http.ResponseWriter, r *http.Request) {
-	//deps := apiDeployments()
 	deps := deployments()
 	err := json.NewEncoder(w).Encode(deps)
 	//out, err := json.Marshal(deps)

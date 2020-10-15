@@ -1,20 +1,18 @@
 {{ template "header" }}
-<div class="content-block">
- <h1>Hello and welcome</h1>
- <p>
-{{ template "home" }}
- </p>
-</div>
+<h1>Posts + Projects</h1>
+{{/* <h1>{{ . }}</h1>  */}}
+<div class="tile_container">
 {{ range $element := . }}
-	<div>
-		<h1>Deployment Name: {{ $element.name }}</h1>
-		<p>Namespace: {{ $element.namespace }}</p>
-		<p>Number of replicas: {{ $element.replicas }}</p>
-		<p>Containers:</p>
-		{{ range $k, $v := $element.containers }}
-			<p>{{ $k }}:{{ $v }}</p>
-		{{ end }}
-		
-	</div>
+    <div class="projects-tile">
+        <h1>Deployment Name: {{ $element.name }}</h1>
+        <p>Namespace: {{ $element.namespace }}</p>
+        <p>Number of replicas: {{ $element.replicas }}</p>
+        <p>Containers:</p>
+        {{ range $k, $v := $element.containers }}
+            <p>{{ $k }}:{{ $v }}</p>
+        {{ end }}
+    </div>
+  </a>
 {{ end }}
+</div>
 {{ template "footer" }}
