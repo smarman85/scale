@@ -24,7 +24,9 @@ func Run() {
 
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	router.HandleFunc("/", home)
+	//router.HandleFunc("/pod/{podName}", podsHandler)
 	router.HandleFunc("/api/v1/deployments", apiHome)
+	//router.HandleFunc("/api/v1/deployments", apipods)
 	http.ListenAndServe(":8080", router)
 }
 
