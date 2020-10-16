@@ -14,12 +14,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type Deployments struct {
+/*type Deployments struct {
 	Name string `json:"name"`
 	Namespace string `json:"namespace"`
 	Replicas int `json:"replicas"`
 	Containers map[string]string `json:"containers"`
-}
+}*/
 
 var tpl *template.Template
 var NAMESPACE string = ""
