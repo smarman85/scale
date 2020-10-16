@@ -23,6 +23,8 @@ func Pods(namespace, podName string){
     panic(err.Error())
   }
 
+  //https://godoc.org/k8s.io/api/core/v1#Pod
+  //https://godoc.org/k8s.io/api/core/v1#PodLogOptions
   //pods, err := clientset.CoreV1()Pods(namespace).List(metav1.ListOptions{})
   pod, err := clientset.CoreV1().Pods(namespace).Get(podName, metav1.GetOptions{})
   if err != nil {
