@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"html/template"
 	"scale/pkg/deployments"
+	"scale/pkg/pods"
 	"github.com/gorilla/mux"
 )
 
@@ -24,9 +25,9 @@ func Run() {
 
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	router.HandleFunc("/", home)
-	//router.HandleFunc("/pod/{podName}", podsHandler)
+	//router.HandleFunc("/pods/{podName}", podsHandler)
 	router.HandleFunc("/api/v1/deployments", apiHome)
-	//router.HandleFunc("/api/v1/deployments", apipods)
+	router.HandleFunc("/api/v1/pods", apiPods)
 	http.ListenAndServe(":8080", router)
 }
 
@@ -46,6 +47,14 @@ func apiHome(w http.ResponseWriter, r *http.Request) {
 		logErrorExitf("Error encoding data %v", err)
 	}
 	//f.Println(string(out))
+}
+
+func apiPods(w http.ResponseWriter, r *http.Request) {
+	pds := pods.ListPods(NAMESPACE)
+	err := json.NewEncoder(w).Encode(pds)
+	if err != nil {
+		logErrorExitf("Error encoding data %v", err)
+	}
 }
 
 func logErrorExitf(msg string, args ...interface{}) {
