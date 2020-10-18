@@ -4,9 +4,8 @@ import (
 	"os"
 	f "fmt"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-        //"k8s.io/apimachinery/pkg/api/errors"
-        "k8s.io/client-go/kubernetes"
-        "k8s.io/client-go/rest"
+  //"k8s.io/apimachinery/pkg/api/errors"
+  "k8s.io/client-go/kubernetes"
 )
 
 /*type Deployments struct {
@@ -16,26 +15,9 @@ import (
 	Containers map[string]string `json:"containers"`
 }*/
 
-func Deployments(namespace string) []map[string]interface{} {
-	/*if os.Getenv("NAMESPACE") != "" {
-		NAMESPACE = os.Getenv("NAMESPACE")
-	} else {
-		NAMESPACE = ""
-	} */
+func Deployments(namespace string, clientset *kubernetes.Clientset) []map[string]interface{} {
 
 	dplymts := make([]map[string]interface{}, 0)
-
-	config, err := rest.InClusterConfig()
-	if err != nil {
-		logErrorExitf("Error creating config: %v", err)
-		panic(err.Error())
-	}
-
-	clientset, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		logErrorExitf("Error creating config: %v", err)
-		panic(err.Error())
-	}
 
 	deps, err := clientset.AppsV1().Deployments(namespace).List(metav1.ListOptions{})
 	if err != nil {

@@ -8,15 +8,29 @@ import (
 	"encoding/json"
 	"html/template"
 	"scale/pkg/deployments"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	"scale/pkg/pods"
 	"github.com/gorilla/mux"
 )
 
 var tpl *template.Template
 var NAMESPACE string = ""
+var clientset *kubernetes.Clientset
 
 func init(){
 	tpl = template.Must(template.ParseGlob("tmpl/*.gohtml"))
+	config, err := rest.InClusterConfig()
+	if err != nil {
+	  logErrorExitf("Error creating config: %v", err)
+	  panic(err.Error())
+	}
+
+	clientset, err = kubernetes.NewForConfig(config)
+	if err != nil {
+	  logErrorExitf("Error creating config: %v", err)
+	  panic(err.Error())
+	}
 }
 
 
@@ -32,7 +46,7 @@ func Run() {
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
-	deps := deployments.Deployments(NAMESPACE)
+	deps := deployments.Deployments(NAMESPACE, clientset)
 	err := tpl.ExecuteTemplate(w, "index.gohtml", deps)
 	if err != nil {
 		log.Println("template didn't execute: ", err)
@@ -40,7 +54,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func apiHome(w http.ResponseWriter, r *http.Request) {
-	deps := deployments.Deployments(NAMESPACE)
+	deps := deployments.Deployments(NAMESPACE, clientset)
 	err := json.NewEncoder(w).Encode(deps)
 	//out, err := json.Marshal(deps)
 	if err != nil {
@@ -50,7 +64,7 @@ func apiHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func apiPods(w http.ResponseWriter, r *http.Request) {
-	pds := pods.ListPods(NAMESPACE)
+	pds := pods.ListPods(NAMESPACE, clientset)
 	err := json.NewEncoder(w).Encode(pds)
 	if err != nil {
 		logErrorExitf("Error encoding data %v", err)
