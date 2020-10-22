@@ -17,6 +17,7 @@ func Run() {
 	router.HandleFunc("/", home)
 	//router.HandleFunc("/pods/{podName}", podsHandler)
 	router.HandleFunc("/api/v1/deployments", apiHome)
+	router.HandleFunc("/api/v1/deployment/{namespace}/{deployName}", apiDeployment)
 	router.HandleFunc("/api/v1/pods", apiPods)
 	http.ListenAndServe(":8080", router)
 }
@@ -37,6 +38,15 @@ func apiHome(w http.ResponseWriter, r *http.Request) {
 		logging.LogErrorf("Error encoding data %v", err)
 	}
 	//f.Println(string(out))
+}
+
+func apiDeployment(w http.ResponseWriter, r * http.Request) {
+	vars := mux.Vars(r)
+	dep := deployments.GetDeployment(vars["namespace"], vars["deployName"])
+	err := json.NewEncoder(w).Encode(dep)
+	if err != nil {
+		logging.LogErrorf("Error encoding data from deployment %v", err)
+	}
 }
 
 func apiPods(w http.ResponseWriter, r *http.Request) {

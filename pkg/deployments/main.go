@@ -2,18 +2,11 @@ package deployments
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-        //"k8s.io/apimachinery/pkg/api/errors"
-        //"k8s.io/client-go/kubernetes"
 	"scale/pkg/globals"
 	"scale/pkg/logging"
+	"encoding/json"
+	//f "fmt"
 )
-
-/*type Deployments struct {
-	Name string `json:"name"`
-	Namespace string `json:"namespace"`
-	Replicas int `json:"replicas"`
-	Containers map[string]string `json:"containers"`
-}*/
 
 //func Deployments(clientset *kubernetes.Clientset) []map[string]interface{} {
 func Deployments() []map[string]interface{} {
@@ -41,4 +34,37 @@ func Deployments() []map[string]interface{} {
 		dplymts = append(dplymts, dep)
 	}
 	return dplymts
+}
+
+func GetDeployment(namespace, deployName string) map[string]interface{} {
+//func GetDeployment(namespace, deployName string) {
+	dep, err := globals.Clientset.AppsV1().Deployments(namespace).Get(deployName, metav1.GetOptions{})
+	if err != nil {
+		logging.LogErrorf("Error getting deployment %s in namespace %s: %v", deployName, namespace, err)
+	}
+	/*f.Println(dep.Name)
+	f.Println(dep.Namespace)
+	f.Println(dep.CreationTimestamp)
+	for k, v := range dep.Labels {
+		f.Printf("%s:%s\n", k, v)
+	}
+	for k, v := range dep.Annotations {
+		f.Printf("%s:%s\n", k, v)
+	}*/
+	config := dep.Annotations["kubectl.kubernetes.io/last-applied-configuration"]
+	configMap := make(map[string]interface{})
+
+	err = json.Unmarshal([]byte(config), &configMap)
+	if err != nil {
+		logging.LogErrorf("Error converting config to map namespace: %s: app: %s error: %v", namespace, deployName, err)
+	}
+
+	return configMap
+
+	/*f.Println(configMap["apiVersion"])
+	f.Println(configMap["kind"])
+	f.Println(configMap["metadata"])
+	f.Println(configMap["spec"])*/
+
+
 }
