@@ -1,11 +1,11 @@
 package deployments
 
 import (
-	"os"
-	f "fmt"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-  //"k8s.io/apimachinery/pkg/api/errors"
-  "k8s.io/client-go/kubernetes"
+        //"k8s.io/apimachinery/pkg/api/errors"
+        //"k8s.io/client-go/kubernetes"
+	"scale/pkg/globals"
+	"scale/pkg/logging"
 )
 
 /*type Deployments struct {
@@ -15,13 +15,14 @@ import (
 	Containers map[string]string `json:"containers"`
 }*/
 
-func Deployments(namespace string, clientset *kubernetes.Clientset) []map[string]interface{} {
+//func Deployments(clientset *kubernetes.Clientset) []map[string]interface{} {
+func Deployments() []map[string]interface{} {
 
 	dplymts := make([]map[string]interface{}, 0)
 
-	deps, err := clientset.AppsV1().Deployments(namespace).List(metav1.ListOptions{})
+	deps, err := globals.Clientset.AppsV1().Deployments(globals.NAMESPACE).List(metav1.ListOptions{})
 	if err != nil {
-		logErrorf("Error getting deployments in namespace %s: %v", namespace, err)
+		logging.LogErrorf("Error getting deployments in namespace %s: %v", globals.NAMESPACE, err)
 	}
 
 	for d, _ := range deps.Items {
@@ -40,14 +41,4 @@ func Deployments(namespace string, clientset *kubernetes.Clientset) []map[string
 		dplymts = append(dplymts, dep)
 	}
 	return dplymts
-}
-
-
-func logErrorExitf(msg string, args ...interface{}) {
-	f.Fprintf(os.Stderr, msg+"\n", args...)
-	os.Exit(1)
-}
-
-func logErrorf(msg string, args ...interface{}) {
-	f.Fprintf(os.Stderr, msg+"\n", args...)
 }

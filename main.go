@@ -4,7 +4,6 @@ import (
 	"scale/pkg/server"
 )
 
-
 func main() {
 	server.Run()
 }

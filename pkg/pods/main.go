@@ -1,20 +1,30 @@
 package pods
 
 import (
-  f "fmt"
   //"encoding/json"
   metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
   //"k8s.io/apimachinery/pkg/api/errors"
-  "k8s.io/client-go/kubernetes"
+  //"k8s.io/api/core/v1"
   //"k8s.io/client-go/rest"
-  "os"
+
+  "scale/pkg/globals"
 )
 
+/*https://stackoverflow.com/questions/53852530/how-to-get-logs-from-kubernetes-using-golang?rq=1 
+func podLogs(namespace, container string, clientset *kubernetes.Clientset) {
+	lgs, err := clientset.CoreV1().Pods(namespace).GetLogs(container, *v1.PodLogOptions{})
+	if err != nil {
+		logErrorf("Probelm getting logs", err)
+	}
+	f.Println(lgs)
+}*/
+
 //func Pods(namespace, podName string){
-func ListPods(namespace string, clientset *kubernetes.Clientset) []map[string]interface{} {
+//func ListPods(clientset *kubernetes.Clientset) []map[string]interface{} {
+func ListPods() []map[string]interface{} {
   allPods := make([]map[string]interface{}, 0)
 
-  ps, err := clientset.CoreV1().Pods(namespace).List(metav1.ListOptions{})
+  ps, err := globals.Clientset.CoreV1().Pods(globals.NAMESPACE).List(metav1.ListOptions{})
   //pod, err := clientset.CoreV1().Pods(namespace).Get(podName, metav1.GetOptions{})
   if err != nil {
     panic(err.Error())
@@ -49,13 +59,4 @@ func ListPods(namespace string, clientset *kubernetes.Clientset) []map[string]in
   }
   return allPods
 
-}
-
-func logErrorExitf(msg string, args ...interface{}) {
-  f.Fprintf(os.Stderr, msg+"\n", args...)
-  os.Exit(1)
-}
-
-func logErrorf(msg string, args ...interface{}) {
-  f.Fprintf(os.Stderr, msg+"\n", args...)
 }
