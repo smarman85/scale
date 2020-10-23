@@ -1,16 +1,16 @@
 {{ template "header" }}
-<h1>Posts + Projects</h1>
-{{/* <h1>{{ . }}</h1>  */}}
+<h1>Deployments</h1>
 <div class="tile_container">
 {{ range $element := . }}
+  <a href="/{{ $element.namespace }}/{{ $element.name }}" >
     <div class="projects-tile">
-        <h1>Deployment Name: {{ $element.name }}</h1>
-        <p>Namespace: {{ $element.namespace }}</p>
-        <p>Number of replicas: {{ $element.replicas }}</p>
-        <p>Containers:</p>
-        {{ range $k, $v := $element.containers }}
-            <p>{{ $k }}:{{ $v }}</p>
-        {{ end }}
+        	<h1>Deployment Name: {{ $element.name }}</h1>
+        	<p>Namespace: {{ $element.namespace }}</p>
+        	<p>Number of replicas: {{ $element.replicas }}</p>
+        	<p>Containers:</p>
+        	{{ range $k, $v := $element.containers }}
+        	    <p>{{ $k }}:{{ $v }}</p>
+        	{{ end }}
     </div>
   </a>
 {{ end }}

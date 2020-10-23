@@ -15,6 +15,7 @@ func Run() {
 
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	router.HandleFunc("/", home)
+	router.HandleFunc("/{namespace}/{deployName}", webDeployment)
 	//router.HandleFunc("/pods/{podName}", podsHandler)
 	router.HandleFunc("/api/v1/deployments", apiHome)
 	router.HandleFunc("/api/v1/deployment/{namespace}/{deployName}", apiDeployment)
@@ -25,6 +26,15 @@ func Run() {
 func home(w http.ResponseWriter, r *http.Request) {
 	deps := deployments.Deployments()
 	err := globals.Tpl.ExecuteTemplate(w, "index.gohtml", deps)
+	if err != nil {
+		logging.LogErrorf("template didn't execute: %v", err)
+	}
+}
+
+func webDeployment(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	dep := deployments.GetDeployment(vars["namespace"], vars["deployName"])
+	err := globals.Tpl.ExecuteTemplate(w, "deployment.gohtml", dep)
 	if err != nil {
 		logging.LogErrorf("template didn't execute: %v", err)
 	}
