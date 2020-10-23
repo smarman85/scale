@@ -1,4 +1,16 @@
 {{ template "header" }}
-<h1>{{ .spec }}</h1>
+<div class="content-block">
+<h1>Name: {{ .spec.template.metadata.name }}</h1>
+<p>Api Type: {{ .kind }}</p>
+<p>Replicas: {{ .spec.replicas }}</p>
+<p>Update Strategy: {{ .spec.strategy.type }}</p>
+<p>Max Surge: {{ .spec.strategy.rollingUpdate.maxSurge }}</p>
+<p>Max Unavailable: {{ .spec.strategy.rollingUpdate.maxUnavailable }}</p>
+<p>Containers:</p>
+{{ range $cont := .spec.template.spec.containers }}
+<p>Image Name: {{ $cont.image }}</p>
+<p>Pull Policy: {{ $cont.imagePullPolicy }}</p>
+<p>Container Name: {{ $cont.name }}</p>
+{{ end }}
 </div>
 {{ template "footer" }}
